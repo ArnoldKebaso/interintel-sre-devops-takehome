@@ -1,6 +1,6 @@
 # SRE / DevOps Intern Take-Home Assessment
 
-This repository contains my submission for the SRE/DevOps intern technical assessment.
+This repository contains my submission for the SRE/DevOps  technical assessment.
 
 ## Scope
 
@@ -13,12 +13,7 @@ This repository contains my submission for the SRE/DevOps intern technical asses
 - test-1-monitoring/: Monitoring stack configs, dashboards, alerts, docs, screenshots
 - test-2-automation/: IaC and automation deliverables (next phase)
 - test-3-troubleshooting/: Scenario markdown answers
-- docs/: Execution guides and supporting notes
 
-## Naming Note
-
-The original prompt showed folder names with spaces and hyphens (for example, `test- 1 - monitoring`).
-This repository uses normalized folder names (`test-1-monitoring`) for cleaner paths and easier tooling.
 
 ## Test 1 Status ✓
 
@@ -34,10 +29,7 @@ Test 1 implementation is **completed and operational** on local Kubernetes (Mini
   - PodCrashLoopBackOff (>5 min sustained)
   - NodeHighCPUUsage (>80% for 3 min)
   - HighPodRestarts (>3 restarts in 10 min)
-- **Documentation**: Implementation guide, setup steps, and deployment commands
-  - `test-1-monitoring/README.md`: Part A (tool justification), Part B (setup), Part C (dashboards/alerts)
-  - `docs/test1-execution-guide.md`: Step-by-step operator runbook
-  - `docs/test1-delivery-summary.md`: Completion checklist and screenshot requirements
+  
 - **Evidence**: Screenshots pending in `test-1-monitoring/screenshots/` (8 files recommended)
 
 **Key Achievements**:
@@ -74,10 +66,6 @@ Test 2 infrastructure automation is **implemented and validated** on AWS:
     - hostname: Set system hostname and update /etc/hosts
     - ssh-user: Create ansible-user with sudo access and SSH key setup
   - inventory.ini.example: Ansible inventory template with proxy jump setup for private subnet access
-- **Documentation** (in `test-2-automation/docs/`):
-  - README.md (main guide): Part A (tool justification), Part B (AWS architecture), Part C (step-by-step guides)
-  - WINDOWS-EXECUTION-GUIDE.md: **Windows-specific walkthrough** covering SSH setup, AWS credential configuration, Terraform execution (init → validate → plan → apply), Ansible ping/playbook execution, troubleshooting Azure connectivity issues, resource cleanup
-  - ARCHITECTURE-REFERENCE.md: Quick command reference, AWS resource relationships, security considerations, cost estimation, decommissioning procedures
 
 **Validated Execution**:
 
