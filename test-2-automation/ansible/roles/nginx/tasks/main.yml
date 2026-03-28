@@ -1,0 +1,49 @@
+---
+# Nginx Installation and Configuration Role
+# Tasks: Install nginx, start service, configure basic site
+
+- name: Install nginx
+  apt:
+    name: nginx
+    state: present
+    update_cache: yes
+    cache_valid_time: 0
+    force_apt_get: yes
+  register: nginx_install_result
+  retries: 4
+  delay: 15
+  until: nginx_install_result is succeeded
+  notify: restart nginx
+
+- name: Ensure nginx is enabled and started
+  systemd:
+    name: nginx
+    enabled: yes
+    state: started
+
+- name: Create simple default index.html
+  copy:
+    content: |
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Gateway - Nginx Healthy</title>
+      </head>
+      <body>
+        <h1>Gateway VM (VM1)</h1>
+        <p>Nginx is running successfully on {{ ansible_hostname }}</p>
+        <p>Hostname: {{ ansible_hostname }}</p>
+        <p>IP Address: {{ ansible_default_ipv4.address }}</p>
+      </body>
+      </html>
+    dest: /var/www/html/index.html
+    mode: '0644'
+
+- name: Check nginx status
+  command: systemctl status nginx
+  register: nginx_status
+  changed_when: false
+
+- name: Display nginx status
+  debug:
+    msg: "{{ nginx_status.stdout_lines }}"

@@ -1,0 +1,37 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: custom-observability-rules
+  namespace: observability
+  labels:
+    release: monitoring
+spec:
+  groups:
+    - name: sre-assessment.rules
+      rules:
+        - alert: PodCrashLoopBackOff
+          expr: max_over_time(kube_pod_container_status_waiting_reason{reason="CrashLoopBackOff"}[5m]) > 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: Pod in CrashLoopBackOff for more than 5 minutes
+            description: "Pod {{ $labels.namespace }}/{{ $labels.pod }} has been in CrashLoopBackOff for over 5 minutes."
+
+        - alert: NodeHighCPUUsage
+          expr: (100 * (1 - avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])))) > 80
+          for: 3m
+          labels:
+            severity: warning
+          annotations:
+            summary: Node CPU usage exceeds 80% for more than 3 minutes
+            description: "Node {{ $labels.instance }} CPU is above 80% for 3 minutes."
+
+        - alert: HighPodRestarts
+          expr: sum by (namespace, pod) (increase(kube_pod_container_status_restarts_total[10m])) > 3
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: Pod restart count is high
+            description: "Pod {{ $labels.namespace }}/{{ $labels.pod }} restarted more than 3 times in 10 minutes."

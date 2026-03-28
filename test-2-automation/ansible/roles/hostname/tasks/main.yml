@@ -1,0 +1,29 @@
+---
+# Hostname Configuration Role
+# Tasks: Set system hostname and update /etc/hosts
+
+- name: Set hostname
+  hostname:
+    name: "{{ hostname_name }}"
+    use: systemd
+  register: hostname_result
+
+- name: Update /etc/hosts with new hostname
+  lineinfile:
+    path: /etc/hosts
+    regexp: '^127\.0\.1\.1'
+    line: "127.0.1.1 {{ hostname_name }}"
+    state: present
+
+- name: Display hostname change
+  debug:
+    msg: "Hostname set to: {{ hostname_name }}"
+
+- name: Verify hostname
+  command: hostname
+  register: current_hostname
+  changed_when: false
+
+- name: Display current hostname
+  debug:
+    msg: "Current hostname: {{ current_hostname.stdout }}"

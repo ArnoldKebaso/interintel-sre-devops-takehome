@@ -1,0 +1,64 @@
+---
+# SSH User Configuration Role
+# Tasks: Create ansible user, configure sudo access, add SSH keys, set file permissions
+
+- name: Create ansible user
+  user:
+    name: "{{ ssh_username }}"
+    groups: sudo
+    shell: /bin/bash
+    createhome: yes
+    home: "/home/{{ ssh_username }}"
+  register: user_create
+
+- name: Add user to sudoers (passwordless)
+  lineinfile:
+    path: /etc/sudoers
+    line: "{{ ssh_username }} ALL=(ALL) NOPASSWD:ALL"
+    validate: 'visudo -cf %s'
+
+- name: Create .ssh directory
+  file:
+    path: "/home/{{ ssh_username }}/.ssh"
+    state: directory
+    mode: '0700'
+    owner: "{{ ssh_username }}"
+    group: "{{ ssh_username }}"
+
+- name: Resolve controller public key path
+  set_fact:
+    controller_public_key_file: "{{ ansible_public_key_file | default(lookup('env', 'HOME') + '/.ssh/assessment-key.pem.pub') }}"
+
+- name: Check whether controller public key file exists
+  stat:
+    path: "{{ controller_public_key_file }}"
+  register: controller_pubkey
+  delegate_to: localhost
+  become: false
+
+- name: Add public key to authorized_keys
+  authorized_key:
+    user: "{{ ssh_username }}"
+    key: "{{ lookup('file', controller_public_key_file) }}"
+    state: present
+  when: controller_pubkey.stat.exists
+
+- name: Skip key injection when public key is missing
+  debug:
+    msg: "No controller public key found at {{ controller_public_key_file }}. Skipping authorized_keys setup."
+  when: not controller_pubkey.stat.exists
+
+- name: Configure SSH config for ansible user
+  copy:
+    content: |
+      Host *
+        StrictHostKeyChecking no
+        UserKnownHostsFile=/dev/null
+    dest: "/home/{{ ssh_username }}/.ssh/config"
+    mode: '0600'
+    owner: "{{ ssh_username }}"
+    group: "{{ ssh_username }}"
+
+- name: Display user creation result
+  debug:
+    msg: "User {{ ssh_username }} created with UID: {{ user_create.uid }}"

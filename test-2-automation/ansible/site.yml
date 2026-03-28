@@ -1,0 +1,102 @@
+---
+# Main Ansible Playbook for Test 2 Infrastructure Configuration
+# Configures VM1 (gateway/nginx) and VM2 (app server) post-provisioning
+#
+# Usage:
+#   PowerShell: ansible-playbook -i inventory.ini site.yml --user ec2-user
+#   If using different SSH key:
+#   ansible-playbook -i inventory.ini site.yml --user ec2-user --private-key /path/to/key.pem
+
+- name: Configure Gateway (VM1)
+  hosts: gateway
+  gather_facts: yes
+  become: yes
+  
+  tasks:
+    - name: Wait for system to be ready
+      wait_for_connection:
+        delay: 10
+        timeout: 300
+      tags: [setup]
+    
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 0
+        force_apt_get: yes
+      register: apt_update_gateway
+      retries: 4
+      delay: 10
+      until: apt_update_gateway is succeeded
+      tags: [package, setup]
+    
+    - name: Install essential packages
+      apt:
+        name:
+          - vim
+          - curl
+          - wget
+          - net-tools
+          - htop
+        state: present
+      tags: [package, setup]
+  
+  roles:
+    - role: hostname
+      tags: [hostname]
+      vars:
+        hostname_name: vm1-gateway
+    
+    - role: nginx
+      tags: [nginx]
+    
+    - role: ssh-user
+      tags: [ssh-user]
+      vars:
+        ssh_username: ansible-user
+
+
+- name: Configure App Server (VM2)
+  hosts: app-server:app_servers
+  gather_facts: yes
+  become: yes
+  
+  tasks:
+    - name: Wait for system to be ready
+      wait_for_connection:
+        delay: 10
+        timeout: 300
+      tags: [setup]
+    
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 0
+        force_apt_get: yes
+      register: apt_update_app
+      retries: 4
+      delay: 10
+      until: apt_update_app is succeeded
+      tags: [package, setup]
+    
+    - name: Install essential packages
+      apt:
+        name:
+          - vim
+          - curl
+          - wget
+          - net-tools
+          - htop
+        state: present
+      tags: [package, setup]
+  
+  roles:
+    - role: hostname
+      tags: [hostname]
+      vars:
+        hostname_name: vm2-app-server
+    
+    - role: ssh-user
+      tags: [ssh-user]
+      vars:
+        ssh_username: ansible-user

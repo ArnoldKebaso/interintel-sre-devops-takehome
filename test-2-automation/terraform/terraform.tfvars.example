@@ -1,0 +1,8 @@
+aws_region         = "your_region"
+your_ip            = "your_ip"
+environment        = "test"
+instance_type      = "your_instance_type"
+public_subnet_cidr = "your_public_subnet_cidr"
+private_subnet_cidr = "your_private_subnet_cidr"
+vpc_cidr           = "your_vpc_cidr"
+ubuntu_ami_id      = "your_ami_id"

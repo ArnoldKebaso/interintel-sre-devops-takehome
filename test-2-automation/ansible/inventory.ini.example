@@ -1,0 +1,20 @@
+# Example Ansible Inventory for Test 2
+# Copy this to inventory.ini and fill in hostnames/IPs from Terraform outputs
+
+[all:vars]
+# Connection settings for Ubuntu instances 
+ansible_user=ec2-user
+ansible_ssh_private_key_file=../terraform/assessment-key.pem
+ansible_python_interpreter=/usr/bin/python3
+
+[gateway]
+# VM1 public IP - replace with output from: terraform output vm1_public_ip
+gateway.local ansible_host=YOUR_VM1_PUBLIC_IP ansible_connection=ssh
+
+[app-server]
+# VM2 private IP (reachable via gateway) - replace with output from: terraform output vm2_private_ip
+app-server.local ansible_host=YOUR_VM2_PRIVATE_IP ansible_connection=ssh ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p -i ../terraform/assessment-key.pem ec2-user@YOUR_VM1_PUBLIC_IP"'
+
+[all]
+gateway.local
+app-server.local

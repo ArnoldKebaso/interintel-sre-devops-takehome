@@ -1,0 +1,49 @@
+# Terraform and Ansible files may contain sensitive data
+
+# Terraform
+terraform.tfvars
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+tfplan
+*.tfplan
+plan.tfplan
+plan-output.txt
+*.backup
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# SSH Keys
+*.pem
+*.pub
+id_rsa
+id_rsa.pub
+*.ppk
+
+# Ansible
+inventory.ini
+*.retry
+host_vars/
+group_vars/
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# IDE
+.vscode/
+.idea/
+*.iml
+.gradle/
+
+# Misc
+.env
+.env.local
+*.log

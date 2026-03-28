@@ -1,0 +1,41 @@
+# Global safety net for local secrets/artifacts
+
+# Terraform local state and plans
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.*
+**/*.tfplan
+**/plan.tfplan
+**/plan-output.txt
+**/crash.log
+**/crash.*.log
+
+# Local variable files (may contain account/IP data)
+**/terraform.tfvars
+
+# Local SSH keys and cert artifacts
+**/*.pem
+**/*.key
+**/*.p12
+**/*.jks
+**/*.ppk
+**/id_rsa
+**/id_rsa.pub
+
+# Local Ansible inventories and vars
+**/inventory.ini
+**/*.retry
+**/host_vars/
+**/group_vars/
+
+# Environment files
+**/.env
+**/.env.*
+
+# OS/editor noise
+**/.DS_Store
+**/Thumbs.db
+**/*.swp
+**/*.swo
+**/.idea/
+**/.vscode/
