@@ -1,4 +1,4 @@
-# SRE / DevOps Intern Take-Home Assessment
+# SRE / DevOps  Take-Home Assessment
 
 This repository contains my submission for the SRE/DevOps  technical assessment.
 
