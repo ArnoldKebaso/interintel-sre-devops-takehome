@@ -176,7 +176,7 @@ Filenames:
 - PrometheusRule CRD is available via kube-prometheus-stack.
 - Cluster has enough resources to run Loki + Promtail + kube-prometheus-stack.
 - Internet access is available for pulling Helm charts and container images.
-- Due to Azure subscription constraints with local banking cards, the environment was simulated locally using Minikube to ensure 100% technical compliance with the monitoring requirements.
+- Due to Azure subscription constraints with local credit cards during account creation, the environment was simulated locally using Minikube to ensure 100% technical compliance with the monitoring requirements.
 
 ## What I Would Improve in Production
 
