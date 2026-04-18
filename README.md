@@ -17,7 +17,7 @@ This repository contains my submission for the SRE/DevOps  technical assessment.
 
 ## Test 1 Status ✓
 
-Test 1 implementation is **completed and operational** on local Kubernetes (Minikube on WSL2):
+Test 1 implementation **completed and operational** on local Kubernetes (Minikube on WSL2):
 
 - **Monitoring Stack**: Full kube-prometheus-stack (Prometheus, Grafana, Alertmanager) + Loki (log aggregation) + Promtail (log forwarding)
 - **Configurations**: YAML Helm values in `test-1-monitoring/config/`
